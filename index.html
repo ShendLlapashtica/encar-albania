@@ -1547,7 +1547,25 @@
       'hibrid':'하이브리드','hybrid':'하이브리드','lpg':'LPG'
     };
 
-    // ─── Fetch directly from Encar via allorigins proxy (no server required) ───
+    // Try one proxy; resolve with parsed Encar data or reject
+    async function tryProxy(proxyUrl, isWrapped) {
+      const r = await fetch(proxyUrl);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const text = await r.text();
+      let data;
+      if (isWrapped) {
+        const outer = JSON.parse(text);
+        if (outer.status && outer.status.http_code === 403) throw new Error('Encar 403');
+        if (!outer.contents) throw new Error('empty contents');
+        data = JSON.parse(outer.contents);
+      } else {
+        data = JSON.parse(text);
+      }
+      if (!Array.isArray(data.SearchResults)) throw new Error('no SearchResults');
+      return data;
+    }
+
+    // ─── Fetch directly from Encar via HTTPS proxy cascade (no server required) ───
     async function fetchCars() {
       if (isLoading) return;
       isLoading = true;
@@ -1572,25 +1590,22 @@
         ? `(And.Hidden.N._.${parts.join('._.')}.)`
         : `(And.Hidden.N.)`;
 
-      const encarUrl = `https://api.encar.com/search/car/list/general?${new URLSearchParams({
-        count: 'true', q, sr: `|ModifiedDate|0|${API_COUNT}`, inav: '|Metadata|Sort'
-      })}`;
+      // Manually encode each param to avoid URLSearchParams double-encoding q
+      const encarUrl = `https://api.encar.com/search/car/list/general`
+        + `?count=true`
+        + `&q=${encodeURIComponent(q)}`
+        + `&sr=${encodeURIComponent(`|ModifiedDate|0|${API_COUNT}`)}`
+        + `&inav=${encodeURIComponent('|Metadata|Sort')}`;
 
-      const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(encarUrl)}`;
-      console.log('[Encar] q:', q);
+      const enc = encodeURIComponent(encarUrl);
+      console.log('[Encar] q:', q, '| URL:', encarUrl.slice(0, 120));
 
       try {
-        const r = await fetch(proxyUrl);
-        if (!r.ok) throw new Error(`Proxy HTTP ${r.status}`);
-        const wrapper = await r.json();
-        if (wrapper.status?.http_code === 403) throw new Error('Encar API bllokoi kërkesën (403). Provo përsëri.');
-        if (!wrapper.contents) throw new Error('Gabim i papritur nga serveri. Provo përsëri.');
-
-        let data;
-        try { data = JSON.parse(wrapper.contents); }
-        catch { throw new Error('Gabim i papritur nga serveri. Provo përsëri.'); }
-
-        if (!data.SearchResults) throw new Error('Nuk u morën të dhëna. Provo përsëri.');
+        const data = await Promise.any([
+          tryProxy(`https://api.allorigins.win/get?url=${enc}`, true),
+          tryProxy(`https://corsproxy.io/?${enc}`, false),
+          tryProxy(`https://api.codetabs.com/v1/proxy?quest=${enc}`, false),
+        ]);
 
         allCars = data.SearchResults || [];
         totalFromApi = data.Count || allCars.length;
@@ -1602,8 +1617,11 @@
 
         applyClientFilters();
       } catch (e) {
-        console.error('[Frontend] Error:', e);
-        showError(e.message);
+        console.error('[Frontend] All proxies failed:', e);
+        const msg = (e instanceof AggregateError)
+          ? 'Nuk u morën të dhëna nga asnjë burim. Provo përsëri.'
+          : (e.message || 'Gabim i papritur. Provo përsëri.');
+        showError(msg);
       } finally {
         isLoading = false;
       }
