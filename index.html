@@ -1721,6 +1721,17 @@
       return `https://ci.encar.com${photoPath}001.jpg`;
     }
 
+    // ─── Dedup by car Id (prevents pagination overlap duplicates) ───
+    function dedup(cars) {
+      const seen = new Set();
+      return cars.filter(c => {
+        const key = c.Id ?? c.CarId;
+        if (!key || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    }
+
     // ─── Paginated fetch: page 0 shows results fast, pages 1-9 load in background ───
     let _fetchSession = 0;
 
@@ -1758,7 +1769,7 @@
         const first = await loadPage(base, 0);
         if (session !== _fetchSession) return;
 
-        allCars      = first.SearchResults || [];
+        allCars      = dedup(first.SearchResults || []);
         totalFromApi = first.Count || 0;
         isLoading    = false;
 
@@ -1772,15 +1783,16 @@
         const numPages = Math.min(Math.ceil(cap / API_COUNT), 10);
 
         for (let pg = 1; pg < numPages; pg += 3) {
-          if (session !== _fetchSession) return; // user started a new search
+          if (session !== _fetchSession) return;
           const batch   = [pg, pg + 1, pg + 2].filter(p => p < numPages);
           const results = await Promise.allSettled(batch.map(p => loadPage(base, p)));
           if (session !== _fetchSession) return;
           let added = 0;
           results.forEach(r => {
             if (r.status === 'fulfilled') {
-              allCars = allCars.concat(r.value.SearchResults);
-              added  += r.value.SearchResults.length;
+              const before = allCars.length;
+              allCars = dedup([...allCars, ...r.value.SearchResults]);
+              added  += allCars.length - before;
             }
           });
           if (added > 0) applyClientFilters();
