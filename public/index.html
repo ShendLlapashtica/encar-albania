@@ -1722,32 +1722,7 @@
       return `https://ci.encar.com${photoPath}001.jpg`;
     }
 
-    // Encar DSL fuel map (Albanian/English → Korean)
-    const ENCAR_FUEL = {
-      'diesel':'디젤','dizel':'디젤','benzin':'가솔린','benzine':'가솔린',
-      'gasoline':'가솔린','elektrik':'전기','electric':'전기',
-      'hibrid':'하이브리드','hybrid':'하이브리드','lpg':'LPG'
-    };
-
-    // Try one proxy; resolve with parsed Encar data or reject
-    async function tryProxy(proxyUrl, isWrapped) {
-      const r = await fetch(proxyUrl);
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      const text = await r.text();
-      let data;
-      if (isWrapped) {
-        const outer = JSON.parse(text);
-        if (outer.status && outer.status.http_code === 403) throw new Error('Encar 403');
-        if (!outer.contents) throw new Error('empty contents');
-        data = JSON.parse(outer.contents);
-      } else {
-        data = JSON.parse(text);
-      }
-      if (!Array.isArray(data.SearchResults)) throw new Error('no SearchResults');
-      return data;
-    }
-
-    // ─── Fetch directly from Encar via HTTPS proxy cascade (no server required) ───
+    // ─── Fetch cars via Vercel serverless function /api/cars ───
     async function fetchCars() {
       if (isLoading) return;
       isLoading = true;
@@ -1761,49 +1736,31 @@
       const yearTo       = document.getElementById('filterYearTo').value;
       const kmTo         = document.getElementById('filterKmTo').value;
 
-      // Build Encar DSL: (And.Hidden.N._.COND1._.COND2.)
-      const parts = [];
-      if (manufacturer) parts.push(`Manufacturer.${manufacturer}`);
-      if (fuel) parts.push(`FuelType.${ENCAR_FUEL[fuel.toLowerCase().trim()] || fuel}`);
-      if (yearFrom || yearTo) parts.push(`Year.range(${yearFrom || 2000}..${yearTo || 2027})`);
-      if (kmTo) parts.push(`Mileage.range(0..${kmTo})`);
-
-      const q = parts.length > 0
-        ? `(And.Hidden.N._.${parts.join('._.')}.)`
-        : `(And.Hidden.N.)`;
-
-      // Manually encode each param to avoid URLSearchParams double-encoding q
-      const encarUrl = `https://api.encar.com/search/car/list/general`
-        + `?count=true`
-        + `&q=${encodeURIComponent(q)}`
-        + `&sr=${encodeURIComponent(`|ModifiedDate|0|${API_COUNT}`)}`
-        + `&inav=${encodeURIComponent('|Metadata|Sort')}`;
-
-      const enc = encodeURIComponent(encarUrl);
-      console.log('[Encar] q:', q, '| URL:', encarUrl.slice(0, 120));
+      const params = new URLSearchParams({ count: API_COUNT });
+      if (manufacturer) params.set('manufacturer', manufacturer);
+      if (fuel)         params.set('fuel', fuel);
+      if (yearFrom)     params.set('yearFrom', yearFrom);
+      if (yearTo)       params.set('yearTo', yearTo);
+      if (kmTo)         params.set('mileageTo', kmTo);
 
       try {
-        const data = await Promise.any([
-          tryProxy(`https://api.allorigins.win/get?url=${enc}`, true),
-          tryProxy(`https://corsproxy.io/?${enc}`, false),
-          tryProxy(`https://api.codetabs.com/v1/proxy?quest=${enc}`, false),
-        ]);
+        const r = await fetch(`/api/cars?${params}`);
+        const data = await r.json();
+
+        if (!r.ok || !Array.isArray(data.SearchResults)) {
+          throw new Error(data.error || `Server error ${r.status}`);
+        }
 
         allCars = data.SearchResults || [];
         totalFromApi = data.Count || allCars.length;
 
-        if (data.Count) {
-          const el = document.getElementById('heroStatCount');
-          if (el) el.textContent = Number(data.Count).toLocaleString('de-DE') + '+';
-        }
+        const el = document.getElementById('heroStatCount');
+        if (el && data.Count) el.textContent = Number(data.Count).toLocaleString('de-DE') + '+';
 
         applyClientFilters();
       } catch (e) {
-        console.error('[Frontend] All proxies failed:', e);
-        const msg = (e instanceof AggregateError)
-          ? 'Nuk u morën të dhëna nga asnjë burim. Provo përsëri.'
-          : (e.message || 'Gabim i papritur. Provo përsëri.');
-        showError(msg);
+        console.error('[fetchCars]', e);
+        showError(e.message || 'Gabim i papritur. Provo përsëri.');
       } finally {
         isLoading = false;
       }
