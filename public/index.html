@@ -538,6 +538,44 @@
       letter-spacing: -0.5px;
     }
 
+    .car-landed {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .landed-ks, .landed-al {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .landed-ks {
+      background: rgba(0,80,160,0.12);
+      border: 1px solid rgba(0,80,160,0.25);
+      color: #7ab8f5;
+    }
+
+    .landed-al {
+      background: rgba(220,30,30,0.10);
+      border: 1px solid rgba(220,30,30,0.22);
+      color: #f5857a;
+    }
+
+    .landed-lbl {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.3px;
+      margin-bottom: 4px;
+    }
+
     .car-tags {
       display: flex;
       flex-wrap: wrap;
@@ -1716,6 +1754,60 @@
     function fmtEur(e) { return '€' + e.toLocaleString('de-DE'); }
     function fmtKm(k) { return Number(k).toLocaleString('de-DE') + ' km'; }
     function fmtYear(y) { return y ? String(y).slice(0, 4) : ''; }
+
+    // ─── Landed price calculators ───
+    const RORO_EUR = 1050;   // Korea → Durrës (RoRo ship)
+    const OVERLAND_EUR = 280; // Durrës → Kosovo (truck)
+
+    function _ccTier(cc) {
+      if (!cc || cc <= 0) return 2000;
+      if (cc <= 1000) return 1000;
+      if (cc <= 1500) return 1500;
+      if (cc <= 2000) return 2000;
+      if (cc <= 2500) return 2500;
+      if (cc <= 3000) return 3000;
+      if (cc <= 3500) return 3500;
+      return 4000;
+    }
+
+    function _exciseKs(cc, age, fuel) {
+      if (fuel === '전기') return 0;
+      var t = _ccTier(cc);
+      var b = {1000:40,1500:90,2000:180,2500:420,3000:700,3500:1100,4000:1800}[t]||180;
+      if (age >= 12) b *= 2.5; else if (age >= 9) b *= 2.0; else if (age >= 6) b *= 1.5; else if (age >= 3) b *= 1.2;
+      if (fuel === '하이브리드') b *= 0.6;
+      return Math.round(b);
+    }
+
+    function _exciseAl(cc, age, fuel) {
+      if (fuel === '전기') return 0;
+      var t = _ccTier(cc);
+      var b = {1000:30,1500:70,2000:140,2500:320,3000:530,3500:850,4000:1400}[t]||140;
+      if (age >= 12) b *= 2.5; else if (age >= 9) b *= 2.0; else if (age >= 6) b *= 1.5; else if (age >= 3) b *= 1.2;
+      if (fuel === '하이브리드') b *= 0.6;
+      return Math.round(b);
+    }
+
+    function landedPrices(c) {
+      var priceEur = eur(c.Price);
+      if (!priceEur) return null;
+      var cc  = c.CylinderCapacity || c.EngineCc || c.Displacement || c.CylinderCc || 0;
+      var yr  = parseInt(fmtYear(c.Year)) || new Date().getFullYear();
+      var age = new Date().getFullYear() - yr;
+      var fuel = c.FuelType || '';
+
+      var ksCIF  = priceEur + RORO_EUR + OVERLAND_EUR;
+      var ksDuty = fuel === '전기' ? 0 : ksCIF * 0.10;
+      var ksVAT  = (ksCIF + ksDuty) * 0.18;
+      var ksLand = Math.round(priceEur + RORO_EUR + OVERLAND_EUR + ksDuty + ksVAT + _exciseKs(cc, age, fuel));
+
+      var alCIF  = priceEur + RORO_EUR;
+      var alDuty = fuel === '전기' ? 0 : alCIF * 0.10;
+      var alVAT  = (alCIF + alDuty) * 0.20;
+      var alLand = Math.round(priceEur + RORO_EUR + alDuty + alVAT + _exciseAl(cc, age, fuel));
+
+      return { ks: ksLand, al: alLand };
+    }
     function imgUrl(photoPath) {
       if (!photoPath) return null;
       return `https://ci.encar.com${photoPath}001.jpg`;
@@ -1920,6 +2012,7 @@
         const transLabel = TRANS_LABELS[c.Transmission] || c.Transmission || '';
         const isNew = parseInt(year) >= 2023;
 
+        const landed = landedPrices(c);
         return `<div class="car-card" onclick="openModal(${i})">
       <div class="car-thumb">
         ${photo
@@ -1931,6 +2024,11 @@
         <div class="car-name">${maker} ${model} ${badge}</div>
         <div class="car-sub">${year} · ${fuelLabel}</div>
         <div class="car-price">${fmtEur(price)}</div>
+        ${landed ? `<div class="landed-lbl">me doganë:</div>
+        <div class="car-landed">
+          <span class="landed-ks">🇽🇰 ${fmtEur(landed.ks)}</span>
+          <span class="landed-al">🇦🇱 ${fmtEur(landed.al)}</span>
+        </div>` : ''}
         <div class="car-tags">
           ${c.Mileage ? `<span class="tag">${fmtKm(c.Mileage)}</span>` : ''}
           ${transLabel ? `<span class="tag">${transLabel}</span>` : ''}
