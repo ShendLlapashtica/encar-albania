@@ -1721,9 +1721,20 @@
       return `https://ci.encar.com${photoPath}001.jpg`;
     }
 
-    // ─── Fetch cars via Vercel serverless function /api/cars ───
+    // ─── Paginated fetch: page 0 shows results fast, pages 1-9 load in background ───
+    let _fetchSession = 0;
+
+    async function loadPage(baseParams, page) {
+      const p = new URLSearchParams({ ...baseParams, page, count: API_COUNT });
+      const r = await fetch(`/api/cars?${p}`);
+      const data = await r.json();
+      if (!r.ok || !Array.isArray(data.SearchResults)) throw new Error(data.error || `HTTP ${r.status}`);
+      return data;
+    }
+
     async function fetchCars() {
       if (isLoading) return;
+      const session = ++_fetchSession;
       isLoading = true;
       allCars = [];
       displayCount = SHOW_STEP;
@@ -1735,32 +1746,49 @@
       const yearTo       = document.getElementById('filterYearTo').value;
       const kmTo         = document.getElementById('filterKmTo').value;
 
-      const params = new URLSearchParams({ count: API_COUNT });
-      if (manufacturer) params.set('manufacturer', manufacturer);
-      if (fuel)         params.set('fuel', fuel);
-      if (yearFrom)     params.set('yearFrom', yearFrom);
-      if (yearTo)       params.set('yearTo', yearTo);
-      if (kmTo)         params.set('mileageTo', kmTo);
+      const base = {};
+      if (manufacturer) base.manufacturer = manufacturer;
+      if (fuel)         base.fuel = fuel;
+      if (yearFrom)     base.yearFrom = yearFrom;
+      if (yearTo)       base.yearTo = yearTo;
+      if (kmTo)         base.mileageTo = kmTo;
 
       try {
-        const r = await fetch(`/api/cars?${params}`);
-        const data = await r.json();
+        // ── First page: show cars immediately ──
+        const first = await loadPage(base, 0);
+        if (session !== _fetchSession) return;
 
-        if (!r.ok || !Array.isArray(data.SearchResults)) {
-          throw new Error(data.error || `Server error ${r.status}`);
-        }
-
-        allCars = data.SearchResults || [];
-        totalFromApi = data.Count || allCars.length;
+        allCars      = first.SearchResults || [];
+        totalFromApi = first.Count || 0;
+        isLoading    = false;
 
         const el = document.getElementById('heroStatCount');
-        if (el && data.Count) el.textContent = Number(data.Count).toLocaleString('de-DE') + '+';
+        if (el && first.Count) el.textContent = Number(first.Count).toLocaleString('de-DE') + '+';
 
         applyClientFilters();
+
+        // ── Background: load up to 5 000 more (pages 1–9) in batches of 3 ──
+        const cap      = Math.min(first.Count || 0, 5000);
+        const numPages = Math.min(Math.ceil(cap / API_COUNT), 10);
+
+        for (let pg = 1; pg < numPages; pg += 3) {
+          if (session !== _fetchSession) return; // user started a new search
+          const batch   = [pg, pg + 1, pg + 2].filter(p => p < numPages);
+          const results = await Promise.allSettled(batch.map(p => loadPage(base, p)));
+          if (session !== _fetchSession) return;
+          let added = 0;
+          results.forEach(r => {
+            if (r.status === 'fulfilled') {
+              allCars = allCars.concat(r.value.SearchResults);
+              added  += r.value.SearchResults.length;
+            }
+          });
+          if (added > 0) applyClientFilters();
+        }
+
       } catch (e) {
         console.error('[fetchCars]', e);
-        showError(e.message || 'Gabim i papritur. Provo përsëri.');
-      } finally {
+        if (!allCars.length) showError(e.message || 'Gabim i papritur. Provo përsëri.');
         isLoading = false;
       }
     }
