@@ -1,0 +1,70 @@
+export const API_COUNT = 500;
+
+export const BRANDS = [
+  'Audi','BMW','Mercedes-Benz','Volkswagen','Porsche','Land Rover','Volvo',
+  'Peugeot','Maserati','Bentley','Ferrari','Lamborghini','Mini','Hyundai',
+  'Kia','Genesis','SsangYong','Renault','Ford','Opel','Seat','Suzuki',
+  'Toyota','Honda','Lexus','Chevrolet',
+];
+
+export const HERO_BRANDS = [
+  'BMW','Mercedes-Benz','Audi','Porsche','Genesis','Hyundai','Kia','Lexus','Land Rover','Volvo',
+];
+
+export const MODEL_MAP = {
+  'Audi':['A3','A4','A5','A6','A7','A8','Q3','Q5','Q7','Q8','e-tron','TT','RS'],
+  'BMW':['1 Series','2 Series','3 Series','4 Series','5 Series','6 Series','7 Series','8 Series','X1','X2','X3','X4','X5','X6','X7','Z4','i3','i4','iX'],
+  'Mercedes-Benz':['A-Class','B-Class','C-Class','E-Class','S-Class','CLA','CLS','GLA','GLB','GLC','GLE','GLS','G-Class','EQC','EQE','EQS'],
+  'Volkswagen':['Golf','Polo','Passat','Tiguan','Touareg','Arteon','T-Roc','ID.4'],
+  'Porsche':['911','Cayenne','Macan','Panamera','Taycan','718'],
+  'Land Rover':['Range Rover','Range Rover Sport','Defender','Discovery','Evoque','Velar'],
+  'Volvo':['S60','S90','V60','V90','XC40','XC60','XC90','C40'],
+  'Hyundai':['Sonata','Tucson','Santa Fe','Palisade','Kona','Ioniq','Ioniq 5','Ioniq 6','Grandeur','Avante','i30','Venue','Casper','Staria'],
+  'Kia':['K5','K8','K9','Sportage','Sorento','Carnival','Seltos','Niro','EV6','Stinger','Soul','Rio'],
+  'Genesis':['G70','G80','G90','GV60','GV70','GV80'],
+  'Toyota':['Camry','Corolla','RAV4','Prius','Highlander','Land Cruiser','Supra'],
+  'Honda':['Civic','Accord','CR-V','HR-V','Pilot'],
+  'Lexus':['ES','IS','LS','RX','NX','UX','LC','LX'],
+  'Chevrolet':['Malibu','Trax','Trailblazer','Equinox','Spark','Bolt'],
+  'SsangYong':['Torres','Korando','Rexton','Tivoli'],
+  'Renault':['SM6','QM6','Arkana','Clio','Megane'],
+  'Ford':['Mustang','Explorer','Ranger','Focus','Escape'],
+  'Mini':['Cooper','Countryman','Clubman'],
+  'Ferrari':['F8','Roma','SF90','812','296'],
+  'Lamborghini':['Urus','Huracan','Aventador','Revuelto'],
+  'Bentley':['Continental GT','Bentayga','Flying Spur'],
+  'Maserati':['Ghibli','Levante','Quattroporte','MC20','Grecale'],
+  'Peugeot':['208','308','3008','5008','508'],
+  'Opel':['Corsa','Astra','Mokka','Grandland'],
+  'Seat':['Leon','Ibiza','Ateca','Arona'],
+  'Suzuki':['Swift','Vitara','Jimny','S-Cross'],
+};
+
+export const BRAND_ALIASES = {
+  'BMW':['bmw'],
+  'Mercedes-Benz':['mercedes','메르세데스','benz','벤츠'],
+  'Audi':['audi','아우디'],
+  'Volkswagen':['volkswagen','vw','폭스바겐'],
+  'Porsche':['porsche','포르쉐'],
+  'Land Rover':['land rover','랜드로버'],
+  'Volvo':['volvo','볼보'],
+  'Mini':['mini','미니'],
+  'Hyundai':['hyundai','현대'],
+  'Kia':['kia','기아'],
+  'Genesis':['genesis','제네시스'],
+  'SsangYong':['ssangyong','쌍용'],
+  'Renault':['renault','르노','samsung','삼성'],
+  'Chevrolet':['chevrolet','쉐보레','daewoo','대우'],
+  'Toyota':['toyota','토요타'],
+  'Honda':['honda','혼다'],
+  'Lexus':['lexus','렉서스'],
+  'Ford':['ford','포드'],
+  'Maserati':['maserati','마세라티'],
+  'Bentley':['bentley','벤틀리'],
+  'Ferrari':['ferrari','페라리'],
+  'Lamborghini':['lamborghini','람보르기니'],
+  'Peugeot':['peugeot','푸조'],
+  'Opel':['opel','오펠'],
+  'Seat':['seat','세아트'],
+  'Suzuki':['suzuki','스즈키'],
+};

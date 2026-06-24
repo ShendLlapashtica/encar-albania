@@ -1,13 +1,19 @@
 {
-  "name": "encar-albania",
-  "version": "1.0.0",
+  "name": "auto-korea-blendi",
+  "version": "2.0.0",
   "type": "module",
-  "description": "Tregu i makinave shqip - Albanian car marketplace powered by Encar Korea",
   "scripts": {
-    "dev": "vercel dev",
-    "deploy": "vercel --prod"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.11",
     "vercel": "^32.0.0"
   }
 }
