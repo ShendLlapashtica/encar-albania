@@ -26,10 +26,11 @@ export function useCars() {
 
     const base = {};
     if (filters.manufacturer) base.manufacturer = filters.manufacturer;
+    if (filters.model)        base.model        = filters.model;
     if (filters.fuel)         base.fuel         = filters.fuel;
-    if (filters.yearFrom)     base.yearFrom      = filters.yearFrom;
-    if (filters.yearTo)       base.yearTo        = filters.yearTo;
-    if (filters.mileageTo)    base.mileageTo     = filters.mileageTo;
+    if (filters.yearFrom)     base.yearFrom     = filters.yearFrom;
+    if (filters.yearTo)       base.yearTo       = filters.yearTo;
+    if (filters.mileageTo)    base.mileageTo    = filters.mileageTo;
 
     try {
       const first = await loadPage(base, 0);

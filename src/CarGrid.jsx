@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import CarCard from './CarCard';
 import CarModal from './CarModal';
 import { tr, eur } from './utils';
+import { BRAND_ALIASES } from './data';
 
 const PAGE = 32;
 
@@ -20,9 +21,29 @@ function Skeletons({ n = 12 }) {
 
 function match(car, q) {
   if (!q) return true;
-  const lq = q.toLowerCase();
-  const fields = [car.Manufacturer, car.Maker, car.Model, car.Badge, car.BadgeSub, car.FormYear];
-  return fields.some(f => f && tr(f).toLowerCase().includes(lq));
+  const lq = q.toLowerCase().trim();
+
+  // Year: match first 4 chars of FormYear
+  const yearStr = String(car.FormYear || '').slice(0, 4);
+  if (yearStr && yearStr.includes(lq)) return true;
+
+  // Translated fields (model, badge, etc.)
+  const fields = [car.Manufacturer, car.Maker, car.Model, car.Badge, car.BadgeSub];
+  if (fields.some(f => f && tr(f).toLowerCase().includes(lq))) return true;
+
+  // Raw fields in case translation strips too much
+  if (fields.some(f => f && String(f).toLowerCase().includes(lq))) return true;
+
+  // Brand alias matching: e.g. "bmw" → BMW cars
+  for (const [brand, aliases] of Object.entries(BRAND_ALIASES)) {
+    const brandLower = brand.toLowerCase();
+    if (brandLower.includes(lq) || aliases.some(a => a.toLowerCase().includes(lq))) {
+      const mfr = (car.Manufacturer || car.Maker || '').toLowerCase();
+      if (mfr.includes(brandLower) || mfr.includes(lq)) return true;
+    }
+  }
+
+  return false;
 }
 
 export default function CarGrid({ cars, loading, error, total, search, onRetry }) {
