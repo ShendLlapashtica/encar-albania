@@ -1369,6 +1369,169 @@
       .spec-grid-3 { grid-template-columns: 1fr 1fr; }
       .modal-img-main, .modal-img-placeholder { height: 260px; }
     }
+
+    /* ── Inspection Report ── */
+    .insp-wrap {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.25rem;
+    }
+    .insp-loading {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      padding: 1rem 0;
+    }
+    .insp-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+    .insp-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 14px;
+      margin-bottom: 1rem;
+    }
+    .insp-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+    .insp-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      background: rgba(255,255,255,0.08);
+      color: var(--text-primary);
+      flex-shrink: 0;
+    }
+    .insp-badge.dmg { background: rgba(248,113,113,0.2); color: #f87171; }
+    .insp-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .insp-tab {
+      padding: 5px 12px;
+      border-radius: var(--radius-xs);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      transition: var(--transition);
+    }
+    .insp-tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .insp-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 8px;
+    }
+    .insp-panel-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 8px;
+      border-radius: var(--radius-xs);
+      background: rgba(255,255,255,0.03);
+      font-size: 12px;
+    }
+    .insp-panel-label { color: var(--text-secondary); }
+    .insp-panel-ok { color: var(--success); font-weight: 700; font-size: 14px; }
+    .insp-panel-dmg { color: #f87171; font-weight: 700; font-size: 12px; }
+    .insp-dmg-zones {
+      margin-top: 0.5rem;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .insp-section-lbl {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 1rem 0 0.5rem;
+    }
+    .insp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-bottom: 0.75rem;
+    }
+    .insp-table th {
+      text-align: left;
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 4px 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border);
+    }
+    .insp-table td {
+      padding: 5px 8px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .insp-table td:last-child {
+      text-align: right;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    .insp-table td.ok { color: var(--success); }
+    .insp-table td.none { color: var(--text-muted); }
+    .insp-usage-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 8px;
+      font-size: 12px;
+      border-radius: var(--radius-xs);
+      background: rgba(255,255,255,0.03);
+      margin-bottom: 4px;
+    }
+    .insp-usage-row span:first-child { color: var(--text-secondary); }
+    .insp-usage-row span:last-child { font-weight: 600; color: var(--text-primary); }
+    .insp-usage-row span.yes { color: #fbbf24; }
+    .insp-owner-row, .insp-svc-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 8px;
+      font-size: 12px;
+      border-radius: var(--radius-xs);
+      background: rgba(255,255,255,0.03);
+      margin-bottom: 3px;
+    }
+    .insp-owner-row span:first-child, .insp-svc-row span:first-child { color: var(--text-muted); }
+    .insp-owner-row span:last-child { color: var(--text-secondary); }
+    .insp-svc-row span:last-child { color: var(--success); font-weight: 600; }
+    .insp-fallback {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: var(--radius-xs);
+      background: rgba(251,191,36,0.07);
+      border: 1px solid rgba(251,191,36,0.2);
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+    .insp-fallback-icon { color: #fbbf24; font-size: 14px; flex-shrink: 0; }
+    .insp-fallback a { color: var(--accent); text-decoration: none; }
+    .insp-fallback a:hover { text-decoration: underline; }
   </style>
 </head>
 
@@ -2050,11 +2213,323 @@
           <a href="${encarUrl}" target="_blank" class="btn-primary">🔗 Shiko në Encar.com</a>
           <a href="https://wa.me/?text=${encodeURIComponent(`Jam i interesuar për: ${maker} ${model} ${badge} ${year} — ${fmtEur(price)}\n${encarUrl}`)}" target="_blank" class="btn-secondary">💬 WhatsApp</a>
         </div>
+
+        <div id="modalInspection"></div>
       </div>
     </div>`;
 
       document.getElementById('modalOverlay').classList.add('open');
       document.body.style.overflow = 'hidden';
+      if (c.Id) loadInspectionReport(c.Id, encarUrl, 'modalInspection');
+    }
+
+    // ─── Inspection Report ───
+    const PANEL_DEF = [
+      { keys: ['FrontBumper','frontBumper','BumperFront','FrBumper'], label: 'Bufera Përpara', zone: 'para' },
+      { keys: ['Hood','hood','HoodPanel','Bonnet','bonnet'], label: 'Kapuç', zone: 'para' },
+      { keys: ['LeftFrontFender','leftFrontFender','LFrontFender','FrontFenderLeft','FFenderL'], label: 'Parafango Para Majtë', zone: 'para' },
+      { keys: ['RightFrontFender','rightFrontFender','RFrontFender','FrontFenderRight','FFenderR'], label: 'Parafango Para Djathas', zone: 'para' },
+      { keys: ['LeftFrontDoor','leftFrontDoor','LFrontDoor','FrontDoorLeft','FDoorL'], label: 'Portë Para Majtë', zone: 'para' },
+      { keys: ['RightFrontDoor','rightFrontDoor','RFrontDoor','FrontDoorRight','FDoorR'], label: 'Portë Para Djathas', zone: 'para' },
+      { keys: ['RoofPanel','roofPanel','Roof','roof','RoofStatus'], label: 'Çati', zone: 'para' },
+      { keys: ['LeftRearDoor','leftRearDoor','LRearDoor','RearDoorLeft','RDoorL'], label: 'Portë Mbrapa Majtë', zone: 'mbrapa' },
+      { keys: ['RightRearDoor','rightRearDoor','RRearDoor','RearDoorRight','RDoorR'], label: 'Portë Mbrapa Djathas', zone: 'mbrapa' },
+      { keys: ['LeftRearFender','leftRearFender','LRearFender','RearFenderLeft','RFenderL'], label: 'Panel Mbrapa Majtë', zone: 'mbrapa' },
+      { keys: ['RightRearFender','rightRearFender','RRearFender','RearFenderRight','RFenderR'], label: 'Panel Mbrapa Djathas', zone: 'mbrapa' },
+      { keys: ['TrunkLid','trunkLid','Trunk','trunk','TrunkPanel'], label: 'Bagazh', zone: 'mbrapa' },
+      { keys: ['RearBumper','rearBumper','BumperRear','RrBumper'], label: 'Bufera Mbrapa', zone: 'mbrapa' },
+    ];
+
+    const PANEL_STATUS = {
+      'X':'ok','정상':'ok','양호':'ok','해당없음':'ok',
+      '교환':'N','판금':'R','부식':'K','흠집':'G','요철':'P','손상':'D',
+    };
+
+    function inspFromSources(car, key) {
+      const srcs = [car?.InspectionInfo, car?.BodyStatus, car?.PaintStatus, car?.ExteriorStatus, car?.BodyInspection, car];
+      for (const s of srcs) if (s && s[key] != null && s[key] !== '') return s[key];
+      return null;
+    }
+
+    function getPanels(car) {
+      return PANEL_DEF.map(p => {
+        let val = null;
+        for (const k of p.keys) { val = inspFromSources(car, k); if (val !== null) break; }
+        return { ...p, val };
+      });
+    }
+
+    function panelBadge(val) {
+      if (!val) return '<span class="insp-panel-ok">✓</span>';
+      const code = PANEL_STATUS[val];
+      if (!code || code === 'ok') return '<span class="insp-panel-ok">✓</span>';
+      return `<span class="insp-panel-dmg">${code}</span>`;
+    }
+
+    function inspVal(car, srcs, ...keys) {
+      for (const s of srcs.filter(Boolean)) for (const k of keys) if (s[k] != null) return s[k];
+      return null;
+    }
+
+    function fmtInspVal(v) {
+      if (!v) return { t: '—', cls: '' };
+      const s = String(v).trim();
+      if (['양호','정상','적정','정상(양호)'].includes(s)) return { t: 'Në rregull', cls: 'ok' };
+      if (['없음','무','없음(누수없음)'].includes(s)) return { t: 'Nuk ka rrjedhje', cls: 'none' };
+      if (['불량','이상'].includes(s)) return { t: 'Problem', cls: '' };
+      return { t: s, cls: '' };
+    }
+
+    function buildRows(car, srcs, defs) {
+      return defs.reduce((acc, [keys, label]) => {
+        const v = inspVal(car, srcs, ...keys);
+        if (v !== null) acc.push({ label, v });
+        return acc;
+      }, []);
+    }
+
+    function tbl(rows) {
+      if (!rows.length) return '';
+      return `<table class="insp-table"><thead><tr><th>Pjesa</th><th>Gjendja</th></tr></thead><tbody>
+        ${rows.map(r => { const d = fmtInspVal(r.v); return `<tr><td>${r.label}</td><td class="${d.cls}">${d.t}</td></tr>`; }).join('')}
+      </tbody></table>`;
+    }
+
+    function fmtDt(d) {
+      if (!d) return '—';
+      const s = String(d).replace(/[^\d-]/g,'');
+      if (/^\d{8}$/.test(s)) return `${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}`;
+      if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0,10);
+      return String(d).trim();
+    }
+
+    function renderInspection(car, carId, encarUrl) {
+      const panels = getPanels(car);
+      const hasPanel = panels.some(p => p.val !== null);
+
+      // Usage flags (try multiple field name variants)
+      const isRental     = car?.IsRental ?? car?.Rental ?? car?.InspectionInfo?.IsRental ?? null;
+      const isCommercial = car?.IsCommercial ?? car?.Commercial ?? car?.InspectionInfo?.IsCommercial ?? null;
+
+      // Owner / service history
+      const ownerHist = [car?.OwnerHistory, car?.OwnerChangeHistory, car?.OwnerHistoryList, car?.InspectionInfo?.OwnerHistory].find(Array.isArray) || null;
+      const svcHist   = [car?.ServiceHistory, car?.MaintenanceHistory, car?.RepairHistory, car?.ServiceRecord, car?.InspectionInfo?.ServiceHistory].find(Array.isArray) || null;
+
+      // Interior inspection rows — try InspectionInfo + section-specific objects + flat on car
+      const engSrc = [car?.InspectionInfo, car?.EngineStatus, car?.Engine, car];
+      const trSrc  = [car?.InspectionInfo, car?.TransmissionStatus, car?.Transmission, car];
+      const stSrc  = [car?.InspectionInfo, car?.SteeringStatus, car?.Steering, car];
+      const brSrc  = [car?.InspectionInfo, car?.BrakeStatus, car?.Braking, car];
+      const elSrc  = [car?.InspectionInfo, car?.ElectricalStatus, car?.Electrical, car];
+      const fuSrc  = [car?.InspectionInfo, car?.FuelStatus, car?.Fuel, car];
+
+      const engRows = buildRows(car, engSrc, [
+        [['EngineIdleStatus','IdleStatus','EngineIdle','IdleOperation'], 'Gjendja e funksionimit (në punë boshe)'],
+        [['HeadCoverOilLeak','OilLeakHeadCover','HeadCoverLeak','EngineOilLeak1'], 'Rrjedhja e vajit rreth kapakut të kokës'],
+        [['CylHeadOilLeak','HeadGasketOilLeak','OilLeakHead','EngineOilLeak2'], 'Rrjedhja e vajit në kokën e motorit'],
+        [['BlockOilLeak','OilPanLeak','EngineBlockLeak','EngineOilLeak3'], 'Rrjedhja e vajit rreth bllokut dhe karterit'],
+        [['OilLevel','OilCirculation','EngineOilLevel'], 'Qarkullimi i vajit'],
+        [['HeadGasketCoolantLeak','CoolantLeakGasket','CoolantLeak1'], 'Rrjedhja e ujit ftohës nga izoluesi i kokës'],
+        [['WaterPumpLeak','CoolantLeakPump','CoolantLeak2'], 'Rrjedhja e ujit ftohës nga pompa e ujit'],
+        [['RadiatorLeak','CoolantLeakRadiator','CoolantLeak3'], 'Rrjedhja e ujit ftohës nga radiatori'],
+        [['CoolantLevel','AntifreezeLevel','CoolantAmount'], 'Sasia e ujit ftohës (antifreeze)'],
+      ]);
+      const trRows = buildRows(car, trSrc, [
+        [['TransmissionOilLeak','GearboxOilLeak','TransOilLeak'], 'Rrjedhja e vajit nga transmisioni'],
+        [['TransmissionIdleStatus','GearboxIdleStatus','TransIdle'], 'Gjendja e funksionimit (në punë boshe)'],
+        [['TransmissionOilLevel','GearboxOilLevel','TransOilLevel'], 'Qarkullimi i vajit të transmisionit'],
+        [['DifferentialStatus','Differential'], 'Diferenciali'],
+        [['DriveShaftBearing','ShaftBearing'], 'Boshti dhe kushinetat'],
+      ]);
+      const stRows = buildRows(car, stSrc, [
+        [['SteeringOilLeak','PowerSteeringOilLeak'], 'Rrjedhje e vajit nga koka e timonit'],
+        [['SteeringGear','SteeringGearElectric','SteeringSystem'], 'Ingranazhet drejtuese dhe sistemi elektrik'],
+        [['UniversalJoint','SteeringJoint'], 'Nyja e drejtimit'],
+        [['TieRodEnd','BallJoint','SteeringBallJoint'], 'Koka e shufrës së drejtimit dhe nyja sferike'],
+        [['PowerSteeringHose','HighPressureHose'], 'Tubi i presionit të lartë të drejtimit'],
+      ]);
+      const brRows = buildRows(car, brSrc, [
+        [['BrakeMasterCylinder','MasterCylinderLeak','BrakeFluidLeak1'], 'Rrjedhja e vajit nga cilindri kryesor'],
+        [['BrakePipeLeak','BrakeLineLeak','BrakeFluidLeak2'], 'Rrjedhja e vajit nga tubat e frenimit'],
+        [['BrakeStatus','BrakeSystem'], 'Gjendja e sistemit të frenimit'],
+      ]);
+      const elRows = buildRows(car, elSrc, [
+        [['AlternatorStatus','Alternator'], 'Alternatori'],
+        [['StarterMotor','Starter'], 'Startuesi i motorit'],
+        [['WiperMotor','WindshieldWiperMotor'], 'Motori i fshësave të xhamave'],
+        [['BlowerMotor','CabinFanMotor'], 'Motori i ventilatorit të kabinës'],
+        [['CoolingFanMotor','RadiatorFanMotor'], 'Motori i ventilatorit të radiatorit'],
+        [['WindowMotor','PowerWindowMotor'], 'Motori i xhamave elektrikë'],
+      ]);
+      const fuRows = buildRows(car, fuSrc, [
+        [['FuelLeak','FuelSystemLeak','FuelLineLeak'], 'Rrjedhja e karburantit'],
+      ]);
+      const hasInterior = engRows.length || trRows.length || stRows.length || brRows.length || elRows.length || fuRows.length;
+
+      let h = `<div class="insp-wrap">
+        <div class="insp-title">Raporti i Plotë në Encar</div>
+        <a href="${encarUrl}" target="_blank" rel="noopener" style="font-size:12px;color:var(--accent);text-decoration:none;display:block;margin-bottom:0.75rem">🔗 Faqja e Makinës në Encar</a>`;
+
+      // ── Body panels ──
+      h += `<div class="insp-section-lbl">Gjendja e Karrocerisë</div>
+        <div class="insp-legend">
+          <span class="insp-legend-item"><span class="insp-badge">N</span> Nderrim</span>
+          <span class="insp-legend-item"><span class="insp-badge">R</span> Riparim</span>
+          <span class="insp-legend-item"><span class="insp-badge">K</span> Korrozion</span>
+          <span class="insp-legend-item"><span class="insp-badge">G</span> Gervishtje</span>
+          <span class="insp-legend-item"><span class="insp-badge">P</span> Parregullsi</span>
+        </div>`;
+
+      if (hasPanel) {
+        const para   = panels.filter(p => p.zone === 'para');
+        const mbrapa = panels.filter(p => p.zone === 'mbrapa');
+        const dmg    = panels.filter(p => p.val && !['X','정상','양호','해당없음'].includes(p.val));
+        const panelHtml = (list) => `<div class="insp-panels">${list.map(p => `<div class="insp-panel-row"><span class="insp-panel-label">${p.label}</span>${panelBadge(p.val)}</div>`).join('')}</div>`;
+
+        h += `<div class="insp-tabs" id="inspPanelTabs">
+          <button class="insp-tab active" onclick="switchPanelTab('para')">PARA — Front</button>
+          <button class="insp-tab" onclick="switchPanelTab('mbrapa')">MBRAPA — Rear</button>
+          <button class="insp-tab" onclick="switchPanelTab('all')">Të Gjitha Zonat · Kontroll i Plotë</button>
+        </div>
+        <div id="panelTabPara">${panelHtml(para)}</div>
+        <div id="panelTabMbrapa" style="display:none">${panelHtml(mbrapa)}</div>
+        <div id="panelTabAll" style="display:none">${panelHtml(panels)}</div>`;
+
+        if (dmg.length) {
+          h += `<div class="insp-section-lbl">Zonat me Dëmtime</div><div class="insp-panels">${dmg.map(p => `<div class="insp-panel-row"><span class="insp-panel-label">${p.label}</span>${panelBadge(p.val)}</div>`).join('')}</div>`;
+        } else {
+          h += `<p style="font-size:12px;color:var(--success);margin:0.5rem 0">✓ Kontroll i Plotë — Asnjë dëmtim i identifikuar</p>`;
+        }
+      } else {
+        // Fallback ONLY when body panel data is genuinely absent
+        h += `<div class="insp-fallback"><span class="insp-fallback-icon">⚠</span>
+          <div>Encar nuk ka kthyer raport inspektimi për këtë makinë — <a href="${encarUrl}" target="_blank" rel="noopener">shiko direkt në Encar</a>
+          <p style="margin-top:4px;font-size:11px;color:var(--text-muted)">Ky inspektim është bërë nga pala koreane para se mjeti të dalë në shitje.</p></div>
+        </div>`;
+      }
+
+      // ── Accident report ──
+      h += `<div class="insp-section-lbl">Raporti i Aksidenteve</div>
+        <div class="insp-legend">
+          <span class="insp-legend-item"><span class="insp-badge dmg">N</span> Nderrim</span>
+          <span class="insp-legend-item"><span class="insp-badge dmg">R</span> Riparim</span>
+          <span class="insp-legend-item"><span class="insp-badge dmg">K</span> Korrozion</span>
+          <span class="insp-legend-item"><span class="insp-badge dmg">G</span> Gervishtje</span>
+          <span class="insp-legend-item"><span class="insp-badge dmg">P</span> Parregullsi</span>
+          <span class="insp-legend-item"><span class="insp-badge dmg">D</span> Dëmtim</span>
+        </div>
+        <div class="insp-tabs" id="inspAccTabs">
+          <button class="insp-tab active" onclick="switchAccTab('out')">Jashtë</button>
+          <button class="insp-tab" onclick="switchAccTab('in')">Brenda</button>
+        </div>
+        <div id="accTabOut">`;
+
+      const hasAcc = car?.Accident === 'Y' || car?.HasAccident === true;
+      const accOut = car?.AccidentOutside ?? car?.ExteriorAccident ?? car?.InspectionInfo?.AccidentOutside ?? null;
+      h += accOut
+        ? `<p style="font-size:12px;color:var(--text-secondary)">${accOut}</p>`
+        : `<p style="font-size:12px;color:${hasAcc ? '#fbbf24' : 'var(--success)'}">${hasAcc ? '⚠ Ka histori aksidentesh' : '✓ Pa aksidente të regjistruara'}</p>`;
+      h += `</div><div id="accTabIn" style="display:none">`;
+      const accIn = car?.AccidentInside ?? car?.InteriorAccident ?? car?.InspectionInfo?.AccidentInside ?? null;
+      h += accIn
+        ? `<p style="font-size:12px;color:var(--text-secondary)">${accIn}</p>`
+        : `<p style="font-size:12px;color:var(--text-muted)">Kontrollo direkt në Encar për detaje të brendshme.</p>`;
+      h += `</div>`;
+
+      // ── Interior inspection ──
+      if (hasInterior) {
+        const subLbl = (t) => `<p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin:0.75rem 0 0.25rem">${t}</p>`;
+        h += `<div class="insp-section-lbl">Inspektimi i brendshëm</div>`;
+        if (engRows.length) h += subLbl('Motori') + tbl(engRows);
+        if (trRows.length)  h += subLbl('Transmisioni') + tbl(trRows);
+        if (stRows.length)  h += subLbl('Drejtimi') + tbl(stRows);
+        if (brRows.length)  h += subLbl('Frenimi') + tbl(brRows);
+        if (elRows.length)  h += subLbl('Elektrika') + tbl(elRows);
+        if (fuRows.length)  h += subLbl('Karburanti') + tbl(fuRows);
+      }
+
+      // ── Usage ──
+      if (isRental !== null || isCommercial !== null) {
+        const yesNo = (v) => (v === 'Y' || v === true || v === 1);
+        if (isRental !== null)     h += `<div class="insp-usage-row"><span>Perdorur si veturë me qera</span><span class="${yesNo(isRental) ? 'yes' : ''}">${yesNo(isRental) ? 'Po' : 'Jo'}</span></div>`;
+        if (isCommercial !== null) h += `<div class="insp-usage-row"><span>Perdorur për qëllime komerciale</span><span class="${yesNo(isCommercial) ? 'yes' : ''}">${yesNo(isCommercial) ? 'Po' : 'Jo'}</span></div>`;
+      }
+
+      // ── Owner history ──
+      if (ownerHist?.length) {
+        h += `<div class="insp-section-lbl">Historia e ndërrimit të pronarëve</div>`;
+        ownerHist.forEach(o => {
+          const d = fmtDt(o?.Date ?? o?.ChangeDate ?? o?.date);
+          const tp = String(o?.Type ?? o?.type ?? '').toLowerCase();
+          const label = tp.includes('소유') || tp.includes('owner') || !tp ? 'Nderrim pronari' : o.Type;
+          h += `<div class="insp-owner-row"><span>${d}</span><span>${label}</span></div>`;
+        });
+      }
+
+      // ── Service history ──
+      if (svcHist?.length) {
+        h += `<div class="insp-section-lbl">Historia e serviseve</div>
+          <table class="insp-table"><thead><tr><th>Data</th><th>Totali</th></tr></thead><tbody>`;
+        svcHist.forEach(s => {
+          const d = fmtDt(s?.Date ?? s?.ServiceDate ?? s?.date);
+          const c = s?.Cost ?? s?.ServiceCost ?? s?.Amount ?? 0;
+          const euros = c ? '€' + Math.round(Number(c) * 10000 * 0.00067).toLocaleString('de-DE') : '—';
+          h += `<tr><td>${d}</td><td class="ok">${euros}</td></tr>`;
+        });
+        h += `</tbody></table>`;
+      } else if (!hasPanel && !hasInterior && isRental === null && !ownerHist?.length) {
+        // Show service history fallback only when the whole report has no data at all
+        h += `<div class="insp-section-lbl">Historia e serviseve</div>
+          <div class="insp-fallback"><span class="insp-fallback-icon">⚠</span>
+            <div>Encar nuk ka kthyer raport automatik<br>
+              <a href="${encarUrl}" target="_blank" rel="noopener">Shiko vetë direkt në Encar për raportin e plotë.</a>
+              <p style="margin-top:4px;font-size:11px;color:var(--text-muted)">Ky inspektim është bërë nga pala koreane para se mjeti të dalë në shitje.</p>
+            </div>
+          </div>`;
+      }
+
+      h += `</div>`;
+      return h;
+    }
+
+    async function loadInspectionReport(carId, encarUrl, containerId) {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      el.innerHTML = `<div class="insp-loading">Duke ngarkuar raportin e inspektimit...</div>`;
+      try {
+        const r = await fetch(`/api/inspection?carid=${carId}`);
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        const data = await r.json();
+        el.innerHTML = renderInspection(data?.car ?? {}, carId, encarUrl);
+      } catch (e) {
+        el.innerHTML = `<div class="insp-wrap"><div class="insp-fallback">
+          <span class="insp-fallback-icon">⚠</span>
+          <div>Nuk u lidh me raportin e inspektimit.<br>
+            <a href="${encarUrl}" target="_blank" rel="noopener">Shiko direkt në Encar.com</a>
+          </div>
+        </div></div>`;
+      }
+    }
+
+    function switchPanelTab(zone) {
+      ['para','mbrapa','all'].forEach((z, i) => {
+        const id = z === 'para' ? 'panelTabPara' : z === 'mbrapa' ? 'panelTabMbrapa' : 'panelTabAll';
+        const el = document.getElementById(id);
+        if (el) el.style.display = z === zone ? '' : 'none';
+      });
+      document.querySelectorAll('#inspPanelTabs .insp-tab').forEach((btn, i) => {
+        btn.classList.toggle('active', ['para','mbrapa','all'][i] === zone);
+      });
+    }
+
+    function switchAccTab(tab) {
+      const out = document.getElementById('accTabOut');
+      const inn = document.getElementById('accTabIn');
+      if (out) out.style.display = tab === 'out' ? '' : 'none';
+      if (inn) inn.style.display = tab === 'in'  ? '' : 'none';
+      document.querySelectorAll('#inspAccTabs .insp-tab').forEach((btn, i) => {
+        btn.classList.toggle('active', i === (tab === 'out' ? 0 : 1));
+      });
     }
 
     function closeModal() {
